@@ -877,6 +877,54 @@ This logical view of our microservices can hide a wealth of complexity when it c
     - database tokens
     - creation, distribution, storage, monitoring, rotation of secrets.
     - AWS secrest manager, Hashicorp Vault
+- Least access possible
+- Patching 
+    - timely patching of OS, drivers, third party libraries are extremly importatn.
+- Backups
+    - Schrodenger's backup 
+    - be sure by regularyle restoring your backup
+- Rebuild
+    - The ability to simply wipe a server from existence and totally rebuild can be incredibly effective not just in the wake of a known attack but also in terms of reducing the impact of persistent attackers.
+### Implicit Trust Versus Zero Trust
+- Implicit trust
+    - every call inside org perimeter is trusted, not recommended.
+
+- Zero Trust
+    - idea is that if you operate under the assumption that you are operating in a hostile environment in which bad actors could already be present, then you have to carry out precautions to make sure that you can still operate safely.
+
+### Securing Data
+- Data in Transit
+    - server identity
+    - client identity
+    - visibility of data
+    - manipulation of data
+
+- Data at Rest
+    - make sure data in encrypted, keys are stored securly somewhere else.
+    - make sure backup is also encrypted.
+    - store only whats needed.
+
+### Authentication and Authorization
+- Authentication is the process by which we confirm that a party is who they say they are.
+- Authorization is the mechanism by which we map from a principal to the action we are allowing them to do
+- Service-to-Service Authentication
+    - use mutual TLS, API hash key etc.
+- Human Authentication
+    - MFA - multifactor authentication
+- Single Sign-On 
+    - When a principal tries to access a resource (like a web-based interface), they are directed to authenticate with an identity provider. The identity provider may ask them to provide a username and password or might require the use of something more advanced like MFA. Once the identity provider is satisfied that the principal has been authenticated, it gives information to the service provider, allowing it to decide whether to grant them access to the resource.
+    - OpenID Connect, LDAP, Active Directory, SAML, 
+- Confused deputy problem 
+    - if user has access to some service, but not to some downstream service, implicit trust can cause issues.
+- centralized authorization
+    - all required authentication in upstream service/sso gateway. makes independent deployability difficult. avoid
+- Decentralizing authorization 
+    - JWT(JSON Web Tokens) : JWTs allow you to store multiple claims about an individual into a string that can be passed around. This token can be signed to ensure that the structure of the token hasn’t been manipulated, and it can also optionally be encrypted to provide cryptographic guarantees around who can read the data
+    - Good way to handle decentralized authorization, best to generate JWT token on request basis.
+    - challenges
+        - Public key management for microservices to decode JWT
+        - expiration of token for long running requests.
+
 
 # Resiliency
 - the prospects of improving the resilience of their service offerings is cited as a major reason for chosing microservice architecture.
