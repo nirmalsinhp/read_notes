@@ -8,7 +8,7 @@
 
 ### Default functions
 - compiler generates default ctor, dtor, copy ctor & copy =, even if not defined, if needed.
-- if those functions are not valid, you want them to be not called ever, declare them private & do not define it.
+- if those functions are not valid, you want them to be not called ever, declare them private & do not define it. - in CPP11 - use = delete & make them public.
 - can use uncopyable base class to make it compile time error.
 - factory function: a function that returnes base class pointer to newly created derived class object.
 - virtual destructor
@@ -38,10 +38,10 @@
 - use objects to manage resources.
 - copying behaviour for raai resources.
 - options:
-       - prohibit copyi
-       - reference count the resource
-       - deep copy
-       - transfer ownership of the underlying resources
+       - prohibit copy - deleted copy ctors & =
+       - reference count the resource - shared ptr
+       - deep copy - RAAI 
+       - transfer ownership of the underlying resources - unique_ptr / auto ptr
 - provide access to underlying resources pointer
 - get function in shared ptr , * & -> operator
 - new & delete
@@ -57,8 +57,8 @@
 
 ### Interface: easy to use correctly & hard to use incorrectly.
 - when in doubt do as the ints do
--  consistency in design and interface
-Treat class design as type design
+- consistency in design and interface
+- Treat class design as type design
 - how objects of new type created & destroyed
 - how initialisation differs from assignment
 - what it means to pass by value
@@ -66,7 +66,7 @@ Treat class design as type design
 - inheritance graph for type
 - conversion, implicit & explicit
 - function & operator for class/type
-- what standard funcs to b disallowed
+- what standard funcs to be disallowed
 - access
 - undeclared interface, gurrantes etc
 
@@ -83,22 +83,20 @@ Treat class design as type design
 - class invariant is always maintained
 
 - Prefer non member non friend function to member function
-
 - Declare non member function when type conversation should apply to all params
-
 - Provide non throwing swap implementation
-- You can totally specialize stf template function for used defined types, can't add anything to std
+- You can totally specialize std template function for used defined types, can't add anything to std
 
-- postpone var defn as long as possible
+- postpone var defination as long as possible
 - minimize casting
-   -  C type Casts
+   - C type Casts
         T(exp)
         (T) exp
-   -  C++ cast
-   -  const_cast :cast away constness
-   -  dynamic_cast : check if object belongs to inheritance heirarchy, used for safe downcasting, runtime expensive
-   -  reinterpret_cast : low level implementation dependent casting
-   -  static_cast : normal type conversion, implicit & forced
+   - C++ cast
+   - const_cast : cast away constness
+   - dynamic_cast : check if object belongs to inheritance heirarchy, used for safe downcasting, runtime expensive
+   - reinterpret_cast : low level implementation dependent casting
+   - static_cast : normal type conversion, implicit & forced
 
 - avoid dynamic_cast, it is very slow
 
@@ -132,7 +130,7 @@ Treat class design as type design
 - using base:f to unhide the functions.
 - inline forwarding can also work.
 
-Inheritance of interface Vs implementation.
+#### Inheritance of interface Vs implementation.
 - pure virtual function : makes class abstract, derived class must implement, derived class inherit only interface
 
 - virtual function : derived class can override, gets interface & implementation
@@ -167,10 +165,10 @@ Inheritance of interface Vs implementation.
 Template provide implicit interface and compile time polymorphism
 Turing complete, stl is best example
 
-- Member functions of class templates are implicitly instantiated only when used, so you should get the full 300 member functions only if each is actually used.)
+- Member functions of class templates are implicitly instantiated only when used, so you should get the full 300 member functions only if each is actually used.
 - base template class function not available in derived template class. By default. Bring it in scope.
 - template dependent typename. When type is dependent on template parameter use typename to define it.
-- complete partial specialization.
+- complete specialization.
 - template instantiation
 - partial specialization
 - non type template parameters like size
@@ -180,6 +178,8 @@ Turing complete, stl is best example
 
 -  If you declare member templates for generalized copy construction or generalized assignment, you'll still need to declare the normal copy constructor and copy assignment operator, too.
 -  implicit type conversion functions are never considered during template argument deduction.
+
+### iterators
 -  Input iterators can move only forward, can move only one step at a time, can only read what they point to, and can read what they're pointing to only once. They're modeled on the read pointer into an input file; the C++ library's istream_iterators are representative of this category.
 -  Output iterators are analogous, but for output: they move only forward, move only one step at a time, can only write what they point to, and can write it only once. They're modeled on the write pointer into an output file; ostream_iterators epitomize this category.
 -  forward iterators. Such iterators can do everything input and output iterators can do, plus they can read or write what they point to more than once. fwd list has it l.
