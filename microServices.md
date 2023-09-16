@@ -9,7 +9,7 @@
 
 ## Independent deployability 
 - is the idea that we can make a change to a microservice, deploy it, and release that change to our users, without having to deploy any other microservices.
-- loosele coupled microservices
+- loosely coupled microservices
 - explicit, well defined, stable contracts between services.
 
 ## Modeled Around a Business Domain
@@ -34,7 +34,7 @@
 - incremental adoption helps you asses impacts and handle accordingly.
 
 ## Alignment of Architecture and Organization
-- Organizations which design systems...are constrained to produce designs which are copies of the communication structures of these organizations. Conway's Law
+- Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations. -  Conway's Law
 - A stream-aligned team is a team aligned to a single, valuable stream of work...[T]he team is empowered to build and deliver customer or user value as quickly, safely, and independently as possible, without requiring hand-offs to other teams to perform parts of the work.
 - MVC have historically teams build around core competency of people like front end, back end, DBAs.
 - in MicroServices world, teams handle microservice built around business capability end to end.
@@ -88,8 +88,7 @@ By combining the concepts of information hiding and domain-driven design with th
 
 - Robustness
     - with microservices, we can build systems that handle the total failure of some of the constituent services and degrade functionality accordingly.
-    - To ensure that our micros
-    ervice systems can properly embrace this improved robustness, we need to understand the new sources of failure that distributed systems have to deal with. Networks can and will fail, as will machines.
+    - To ensure that our microservice systems can properly embrace this improved robustness, we need to understand the new sources of failure that distributed systems have to deal with. Networks can and will fail, as will machines.
 
 - Scaling
     - With a large, monolithic service, we need to scale everything together.
@@ -179,7 +178,7 @@ By combining the concepts of information hiding and domain-driven design with th
     - Just remember the importance of information hiding. Share only what you absolutely have to, and send only the absolute minimum amount of data that you need.
 
 - Pass-Through Coupling
-    - “Pass-through coupling”9 describes a situation in which one microservice passes data to another microservice purely because the data is needed by some other microservice further downstream. 
+    - “Pass-through coupling” describes a situation in which one microservice passes data to another microservice purely because the data is needed by some other microservice further downstream. 
     - problematic
     - should try to reduce it, removing it may lead to more domain coupling, take balanced approach. try to keep microservices independent, impact of change should be minimum.
 
@@ -554,7 +553,8 @@ Many options, choose your style, synchronous vs asynchronous, request-response v
 - commit phase -  if services agree, commit changes, unlocks rows.
 - very difficult and error prone to achieve. isolation is lost from ACID, deadlocks, latency, performance hits.
 - Avoid distributed transactions due to reasons above.
-- Google spanner achieved successful distributed transaction. [Spanner](https://www.youtube.com/watch?v=iKQhPwbzzxU&ab_channel=Devoxx)
+- Google spanner achieved successful distributed transaction.
+[Spanner](https://www.youtube.com/watch?v=iKQhPwbzzxU&ab_channel=Devoxx)
 
 ## Sagas
 - Unlike a two-phase commit, a saga is by design an algorithm that can coordinate multiple changes in state, but avoids the need for locking resources for long periods of time. A saga does this by modeling the steps involved as discrete activities that can be executed independently. 
@@ -716,7 +716,7 @@ This logical view of our microservices can hide a wealth of complexity when it c
 - service - routing endpoint for pods, way to map pods to stable network interface.
 - replica sets - define desired state of pods, i.e 4 instances 
 - deployments - A deployment is how you apply changes to your pods and replica sets. 
-    ~[Kubernetes](Images/K8S.png)
+    ![Kubernetes](Images/K8S.png)
 - So, to deploy your microservice, you define a pod, which will contain your microservice instance inside it; you define a service, which will let Kubernetes know how your microservice will be accessed; and you apply changes to the running pods using a deployment.
 
 #### multitenancy and federation 
@@ -958,7 +958,7 @@ This logical view of our microservices can hide a wealth of complexity when it c
 
 ### Degrading Functionality
 - An essential part of building a resilient system, especially when your functionality is spread over a number of different microservices that may be up or down, is the ability to safely degrade functionality.
-- for monoliths, system health os binary, up or down. for microservices architecture, one seervice being unavailable should not put entire system to halt, system should work with some degradation.
+- for monoliths, system health is binary, up or down. for microservices architecture, one seervice being unavailable should not put entire system to halt, system should work with some degradation.
 
 ## stability patterns
 - systems that just act slow are much harder to deal with than systems that just fail fast. In a distributed system, latency kills.

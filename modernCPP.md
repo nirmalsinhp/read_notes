@@ -249,8 +249,8 @@ const auto x = 12;  - 12 is expr, auto is T, const auto  is param type, x is con
                                 typename std::decay<T>::type
                                 >::value
             >::type
->
-explicit Person(T&& n);
+            >
+    explicit Person(T&& n);
     ```
 
 ### reference collapsing
@@ -283,11 +283,11 @@ explicit Person(T&& n);
 - lambda is an expression.
 - closure is run time object that is created for lambda.
 - closure class is a class instantiated for lambda.
-- [](){} is a simplest lambda, return type is auto deduced, can be provided as trailing types if needed.
+-   ```[](){}```  is a simplest lambda, return type is auto deduced, can be provided as trailing types if needed.
 - lambdas are const by default, so captures can not be modified.
 
 ### Avoid default capture modes.
-- lambda syntax , [](){} - simplest lambda
+- lambda syntax , ```[](){}``` - simplest lambda
 - [=] default value capture  : susceptible to dangling refs
 - [&] default reference capture
 - Default by-value capture is susceptible to dangling pointers (especially this), and it misleadingly suggests that lambdas are self-contained.
@@ -320,8 +320,8 @@ explicit Person(T&& n);
 # The Concurrency API
 
 ### Prefer task-based programming to thread-based.
-- thread t([](){return val;}) - thread based - you need to  manage scheduling
-- auto fut = async([](){return val;}) - task based  - scheduler can manage it for you, no need to worry about oversubscription, load balancing etc.
+- ```thread t([](){return val;})``` - thread based - you need to  manage scheduling
+- ```auto fut = async([](){return val;})``` - task based  - scheduler can manage it for you, no need to worry about oversubscription, load balancing etc.
 - threads can not return values, and if exception is thrown, std::terminate gets called, terminating program.
 - task based approach provides future to return value & can catch exception also.
 - std::async can run task in the same thread, if needed based on scheduling context.
@@ -360,7 +360,7 @@ explicit Person(T&& n);
     - other futures are just deleted, similar to detach
 - “Futures from std::async block in their destructors.”
 
-    ![Thread channel](image.png)
+    ![Thread channel](/Images/image.png)
 
 ### Consider void futures for one-shot event communication.
 - using condition variable & mutex to notify other task has 2 problems
@@ -405,7 +405,7 @@ explicit Person(T&& n);
 
 # concurrency:
 
-### Synchronization:
+### Synchronization
 - sometimes you don’t just need to protect the data, you also need to synchronize actions on separate threads.
 
 ### How to wait?
