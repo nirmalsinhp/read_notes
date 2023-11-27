@@ -187,14 +187,13 @@ Turing complete, stl is best example
 -  random access iterators. These kinds of iterators add to bidirectional iterators the ability to perform “iterator arithmetic,” i.e., to jump forward or backward an arbitrary distance in constant time.
 -  traits allow you to get information about a type during compilation.
 -  template metaprogram is a program written in C++ that executes inside the C++ compiler.
--  template meta programming.
 -  generative programming.
 -  Turing complete.
 
 
 ### New & delete
-- handles memory
-- [] new and delete are different operators
+- handles memory allocation & de allocation.
+- new/delete & new []/delete [] are diff set of operators later one used for array allocation.
 - new handler function is called when operator new can't allocate asked memory, you can set it. Using set new handler function.
 - write custom new & delete to
     -  improve efficiency space /performance
@@ -217,21 +216,3 @@ Turing complete, stl is best example
 
 - move: i no longer need this value!!
 
-### OOP Extra
-- Non virtual interface
-- keep virtual function private, keep public functions non virtual
-- give one cohesive responsibility for one class
-- overridden function must be virtual
-- always make polymorphic base class dtor virtual
-- use override keyword for overridden function
-- any derived class declaration hides base class declaration of the same name .
-- overloading does not happen accross scope.
-- do not mix overloading and overriding
-- don't specify default values for overriding functions
-- when a type's constructor/dtor is executing, the static and dynamic type of the object is that type
-- do not call virtual function in constructor or destructors.
-- upcasting - safe, doing all the times.
-- downcasting - unconditional static cast, fast if you are sure, undefined behaviour of incorrect.
-- conditional dynamic_cast is vit slower, but safe.
-- avoid casting by refactoring whenever possible.
-- conversion operators do not have a return type.

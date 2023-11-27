@@ -561,9 +561,11 @@ Many options, choose your style, synchronous vs asynchronous, request-response v
 - handle long lived transactions.
 - break down LLT into sequqnce of transactions, each of which can be handled independently.
 - We can break a single business process into a set of calls that will be made to collaborating services—this is what constitutes a saga. still not ACID accross services or databases.
+
     ![saga for order processing](Images/order_saga.png)
+
 - Failure modes:
-    - Backward recovery : rollback, how to revert completer operations.
+    - Backward recovery : rollback, how to revert complete operations.
         - not similar to rollback in ACID transaction, you do *compensating transaction* for every step in saga, design saga such that rollbacks are smooth and there are need for limited compensating transactions
     - forward recovery : pickup from failure and try to procees ahead. do retries.
 - It’s really important to note that a saga allows us to recover from business failures, not technical failures.
@@ -1151,3 +1153,117 @@ This logical view of our microservices can hide a wealth of complexity when it c
 
 - Scale when needed, not upfront.
 - The need to change our systems to deal with scale isn’t a sign of failure. It is a sign of success.
+
+# User Interface
+
+## toward digital
+- The understanding that we cannot predict exactly how a customer might end up interacting with our products has driven adoption of more granular APIs, like those delivered by microservices.
+
+- Every team should own the functioinality end to end including front end, back end and data store.
+## Toward Stream-Aligned Teams
+- *A stream-aligned team is a team aligned to a single, valuable stream of work...[T]he team is empowered to build and deliver customer or user value as quickly, safely, and independently as possible, without requiring hand-offs to other teams to perform parts of the work.*
+
+## reasons specialized front end teams are created.
+- scarcity of specialist - share specialist resources
+- need for consistency - create generic components, allow inconsistency if works
+- technical challenges - user interface are varied like mobiele, desktop applications, browser based web apps, wearables, POS
+
+### Pattern: Monolithic Frontend
+- The monolithic frontend pattern describes an architecture in which all the UI state and behavior is defined in the UI itself, with calls made to backing microservices to get required data or carry out required operations.
+- Really, this pattern works best when you want all of the implementation and behavior of your UI in one deployable unit, slipperly slope, can turn into layered architecture.
+
+### Pattern : Micro Frontend
+- The micro frontend approach is an organizational pattern whereby different parts of a frontend can be worked on and deployed independently. 
+- Where microservices deliver independent deployability for the backend functionality, micro frontends deliver independent deployability for the frontend.
+
+#### Pattern: Page-Based Decomposition
+- In page-based decomposition, our UI is decomposed into multiple web pages. Different sets of pages can be served from different microservices.
+- simple, easy to adopt for different UIs, devices, etc
+
+#### Pattern: Widget-Based Decomposition
+- With widget-based decomposition, a screen in a graphical interface contains widgets that can be independently changed. 
+- i.e. recommendation widget, basket widget
+- You still need some sort of assembly layer to pull these parts together. This could be as simple as making use of server-side or client-side templates, though.
+
+### Pattern: Central Aggregating Gateway
+- A central-purpose aggregating gateway sits between external user interfaces and downstream microservices and performs call filtering and aggregation for all user interfaces.
+- who will own it, can become contention to delivery.
+- diff interfaces needs diff data, mobile and web interface for example.
+- do not put it in generic API gateway, do not make it too bulky.
+
+### Pattern: Backend for Frontend (BFF)
+- The BFF is tightly coupled to a specific user experience and will typically be maintained by the same team as the user interface, thereby making it easier to define and adapt the API as the UI requires, while also simplifying the process of lining up release of both the client and server components.
+- “one experience, one BFF.”
+- seperate BFF for android, iOs, web etc.
+
+![BFF](/Images/BFF.png)
+
+### GraphQL
+- GraphQL is a query language that allows clients to issue queries to access or mutate data
+- Need a resolver.
+- we can use GraphQL to implement an aggregating gateway, or even a BFF.
+
+# Organizational Structure
+
+## Loosely coupled organizations
+- Throughout the book, I’ve made the case for a loosely coupled architecture and argued that alignment with more autonomous, loosely coupled, stream-aligned teams is likely going to deliver the best outcomes.
+- whether team can
+    - Make large-scale changes to the design of their system without the permission of somebody outside the team
+    - Make large-scale changes to the design of their system without depending on other teams to make changes in their systems or creating significant work for other teams
+    - Complete their work without communicating and coordinating with people outside their team
+    - Deploy and release their product or service on demand, regardless of other services it depends upon
+    - Do most of their testing on demand, without requiring an integrated test environment
+    - Perform deployments during normal business hours with negligible downtime
+- Fundamentally, achieving loosely coupled organizational structures requires that power and accountability are decentralized.
+
+## strong ownership
+## collective ownership
+## comminity of practice.
+## enabling teams - platform teams, 
+## 2-pizza teams
+## the paved road
+
+# The Evolutionary architect
+- *Architecture is about the important stuff. Whatever that is*
+- an architectural vision that satisfies the needs of the system and its users, as well as those of the people who work on the system itself.
+- So you might end up defining architecture as things that people perceive as hard to change
+
+## Making Change Possible
+
+## An Evolutionary Vision for the Architect
+- software keeps changing, even after production release.
+- software architects need to shift their thinking away from creating the perfect end product and focus instead on helping create a framework in which the right systems can emerge and continue to grow as we learn more.
+- consider software architecture as town planning, cities are living organisms, keep changing, growing/shrinking.
+- We cannot foresee everything that will happen, and so rather than plan for each and every eventuality, we should plan to allow for change by avoiding the urge to overspecify every last thing.
+- In the beginning, the architecture of a software-intensive system is a statement of vision. In the end, the [a]rchitecture of every such system is a reflection of the billions upon billions of small and large, intentional and accidental design decisions made along the way.
+- Habitability is the characteristic of source code that enables programmers coming to the code later in its life to understand its construction and intentions and to change it comfortably and confidently.
+
+## A Principled Approach
+- Making decisions in system design is all about trade-offs, and microservice architectures give us lots of trade-offs to make! 
+### Strategic Goals 
+    - align tech decision with stratagic goals
+### Principles 
+    - Principles are rules you have made in order to align what you are doing to some larger goal, and they will sometimes change.
+### Practices
+    - Our practices are how we ensure our principles are being carried out. They are a set of detailed, practical guidelines for performing tasks.
+    - coding standards, logging mechanism, code coverage, integration style.
+
+- fitness functions to keep in check that architecture is moving in direction to achieve goals. 
+
+## the required standard
+- all microservices should have autonomy, but still all needs to fit cohesively in large systems.
+- all microservices needs to be "good citizen", minimum requirements,
+
+### Monitoring
+- It is essential that we are able to draw up coherent, cross-service views of our system health.
+- ensuring all micro services emit health & monitoring metrics the same way.
+### Interfaces
+- Picking a small number of defined interface technologies helps integrate new consumers.
+
+### Architectural Safety
+- governance, making sure one micro service does not bring all down
+## The paved road
+- exemplars - running examples of what is considered good.
+- Tailored Microservice Template - template service with much of the boiler plate functionality bolted in. spring boot is one example.
+
+## technical debt

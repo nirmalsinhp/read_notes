@@ -1,6 +1,12 @@
 # Type Deduction:
 ### function templates
 
+- ```
+    template<typename T>
+    void func(ParamType p){}
+
+    called like func(expr)
+  ```
 - expr is reference or pointers : reference/pointers is ignored, constness is not. than pattern match.
 - expr is universal reference(&&) : if expr is lvalue , param is lvalue, otherwise follow rule 1.
 - expr is value type - pass by value, ignores constness & reference both.
@@ -49,12 +55,16 @@ const auto x = 12;  - 12 is expr, auto is T, const auto  is param type, x is con
 - =  can't be used for non copyable types- like atomic, 
 - {} works everywhere, so uniform initialization.
 - {} does not allow narrowing conversions.
-- most vexing parse does not affect {} initilizations.
+- most vexing parse does not affect {} initilizations. 
+    ```
+    widget w() - function declration
+    widget W{} -  calls default ctor
+    ```
 - BUT, {} initialization does not work well with auto, as types are considered initializer_list, and if there is ctor taking initializer list, it will be picked up over any other ctor, as long as values can be converted to it, gives surprizing results.
 
 ### prefer nullptr to 0 and NULL
 - nullptr can be assigned to any pointer, easily convertible to all raw pointers.
-- can not bind to smart pointer passed as lvalue ref.
+- NULL/0 can not bind to smart pointer passed as lvalue ref.
 - decltype(auto)  deduces return type from c++14, trailing return type with auto can be used in c++11.
 - avoid overloading on integral & pointer types, 
 
@@ -67,8 +77,8 @@ const auto x = 12;  - 12 is expr, auto is T, const auto  is param type, x is con
 - doing this with typedefs is tricky and cumbersome, with typedefs using typename is needed when using that aliases, alias template works just using alias.
 
 ### Prefer scoped enums to unscoped enums.
--  enum color {red, black}; : unscoped enums are visible to outer scopes. convertible to integrals.
--   enum class color(red, black); : scoped enums(enum classes) are limited to enum class scope, so same name can be used in outer scope with diff variables & enum classes. are not implicitly convertible to integrals. use static cast to convert.
+- enum color {red, black}; : unscoped enums are visible to outer scopes. convertible to integrals.
+- enum class color(red, black); : scoped enums(enum classes) are limited to enum class scope, so same name can be used in outer scope with diff variables & enum classes. are not implicitly convertible to integrals. use static cast to convert.
 - enum class can be forward declared.
 - default underlying type of enum is int, to override enum class color : char; 
 
@@ -148,6 +158,7 @@ const auto x = 12;  - 12 is expr, auto is T, const auto  is param type, x is con
 - unique_ptr<T[]> for arrays.
 - make_unique as factory function to create unique ptrs.
 - unique_ptr<T, void(f*) (T*)> up (new T(), &f); -- custom deleter.
+- A function taking a unique_ptr by value shows transfer of ownership.(sink)
 
 ### Use std::shared_ptr for shared-ownership resource management.
 - shared ownership semantics, similar to garbage collection
@@ -160,7 +171,7 @@ const auto x = 12;  - 12 is expr, auto is T, const auto  is param type, x is con
     - copy ctor : rc++
     - copy = op : rc++ dest, rc-- source, if rc goes to 0, delete it.
     - move ctor : moves the pointer & control block from source. no change in rc. source set to null.
-    - move = op : moves the pointer & control block from source
+    - move = op : moves the pointer & control block from source. --rc dest, source set to null.
 - shared pointer rc incr/decr is atomic, so slow.
 - enable shared from this, when you want to create shared pointer from this, uses CRTP. call shared_from_this.
 - control block created when shared pointer is created with
@@ -168,6 +179,7 @@ const auto x = 12;  - 12 is expr, auto is T, const auto  is param type, x is con
     - from unique pointer
     - raw pointers.
 - make shared does not provide option to give custom deleter. custom deleter is not part of type.
+- aliasing ctor for shared ptr
 
 ### Use std::weak_ptr for std::shared_ptr-like pointers that can dangle.
 - weak pointer, is like observer. created from shared pointer, does not take part in shared ownership & does not affect reference counting. use same control block as shared pointer.
@@ -185,7 +197,7 @@ const auto x = 12;  - 12 is expr, auto is T, const auto  is param type, x is con
 - does not work with { }, as {} cant be perfect forwarded.
 - make shared has 2 other issues.
     - when using with custom allocater, and class specific new & delete it does not work.
-    - and as long as weak count does not goes to 0, control block is not deleted & thus when using make shared, object is also not deleted as long as there is any waek pointer reference.
+    - and as long as weak count does not goes to 0, control block is not deleted & thus when using make shared, object is also not deleted as long as there is any weak pointer reference.
 
 ### When using the Pimpl Idiom, define special member functions in the implementation file.
 - Pimpl idiom helps with compilation times & indirection.
@@ -217,7 +229,7 @@ const auto x = 12;  - 12 is expr, auto is T, const auto  is param type, x is con
 - && can mean, rvalue reference or universal reference.
 - rvalue reference only binds to rvalue, universal reference can bind to lvalue & rvalues both(typically anything).
 - && is universal reference only in cases where there is type deduction, so T&&  or auto&&.
-- check reference collapsing
+- check reference collapsing - && && -> && , && & -> & 
 
 ### Use std::move on rvalue references, std::forward on universal references.
 - use std::move/std::forward to rvalue/universal reference when being used last time.
@@ -403,6 +415,41 @@ const auto x = 12;  - 12 is expr, auto is T, const auto  is param type, x is con
 - Emplacement functions use direct initialization, which means they may use explicit constructors
 
 
+# Templates
+- tag dispatch
+- type traits
+- enable_if
+- sfinae
+- type deduction
+- function can not be partially specialized
+- overload resolution set.
+- compiler error if compiler can't instantiate, or figure out template parameters
+- variadic templates
+
+# OOP:
+### OOP Extra
+- OOP is "is-a" relationship. not for code reuse.
+- make non leaf classes abstract.
+- Non virtual interface
+- keep virtual function private, keep public functions non virtual
+- give one cohesive responsibility for one class
+- overridden function must be virtual
+- always make polymorphic base class dtor virtual
+- use override keyword for overridden function
+- any derived class declaration hides base class declaration of the same name .
+- overloading does not happen accross scope.
+- do not mix overloading and overriding
+- don't specify default values for overriding functions
+- when a type's constructor/dtor is executing, the static and dynamic type of the object is that type
+- do not call virtual function in constructor or destructors.
+- upcasting - safe, doing all the times.
+- downcasting - unconditional static cast, fast if you are sure, undefined behaviour of incorrect.
+- conditional dynamic_cast is bit slower, but safe.
+- avoid casting by refactoring whenever possible.
+- conversion operators do not have a return type. 
+- slicing -
+- sizeof always give size based on static type.
+
 # concurrency:
 
 ### Synchronization
@@ -440,3 +487,11 @@ const auto x = 12;  - 12 is expr, auto is T, const auto  is param type, x is con
 - timeout
         - duration based - 30 second -- wait_for
         - absolute - till 5 PM -- wait_until
+    
+- shared_lock on shared_mutex reader/writer lock.
+- scoped_lock to lock multiple mutexes at once.
+- once_flag to run any function just once.
+- static is not by default thread safe
+- counting semaphore std::counting_semaphore<256> sem, sem.aquire() & sem.release()
+- std::latch with +ve starting value, wait() blocks till latch goes to 0. count_down - decrements the counter, arrive_and_wait() -  decrements and wait. like stop gap for everyone to join at same point.
+- std::barrier - resetable latch
