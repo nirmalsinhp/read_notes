@@ -130,11 +130,11 @@ const auto x = 12;  - 12 is expr, auto is T, const auto  is param type, x is con
 ### Understand special member function generation.
 - compiler generates following functions if not declared by programmer and used.
     - default ctor (only if no parameterized ctor is defined.) :  A()
-    - copy ctor : A(const A&)
-    - copy = : A& operator=(const A&)
-    - destructor : ~A()
-    - move ctor -- c++11 : A(A&&)
-    - move =  -- C++11 : A& operator=(A&&)
+    - copy ctor : A(const A&) - copy resource
+    - copy = : A& operator=(const A&) - free left side & copy right side resource
+    - destructor : ~A() - free the resource
+    - move ctor -- c++11 : A(A&&) - transfer ownership
+    - move =  -- C++11 : A& operator=(A&&) - free left hand & transfer ownership of right hand resource
 - c++98 rule of three, c++11 - rule of five.
 - move ops are not generated if,
     - dotr or any of copy ops defined.

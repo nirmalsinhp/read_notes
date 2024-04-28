@@ -50,7 +50,7 @@ HTTP runs on top of TCP, single HTTP request/response is broken into network pac
 ### network behaviour
 - Reliable : message recieved if and only if sent, may be reordered.
 - fair loss : messages may be lost, duplicated, reordered.
-- Arbitary (active advarsary) : malicious advarsary may interfere woth messages (spoof, drop, modify, eavesdrop, replay )
+- Arbitary (active advarsary) : malicious advarsary may interfere with messages (spoof, drop, modify, eavesdrop, replay )
 
 - Network partition - some links may be dropping/delaying messages for extended periods of time.
 - one type of behaviour can be converted in other type of behaviour.
@@ -60,7 +60,7 @@ HTTP runs on top of TCP, single HTTP request/response is broken into network pac
 ### node behaviour
 - Crash-stop : node crashes & stops forever.
 - Crash - recovery : node crashes, losses memory & may start executing after some time.
-- Bytantine - it may deviate from algorithm. 
+- Byzantine - it may deviate from algorithm. 
 
 if node is not faulty , it is correct. one node does not know if other is correct or not.
 
@@ -73,15 +73,15 @@ if node is not faulty , it is correct. one node does not know if other is correc
 - Node execution speed can be affected due to OS scheduling issue, garbage collection, pagefaults, thrasing 
 
 ## fault tolerance :
-Availability - system functioning correctly.
-Failure - entire system is not working
-Fault - some part of system is faulty/down
-Fault tolerance -  system working with some fault.
-Single point of failure
+- Availability - system functioning correctly.
+- Failure - entire system is not working
+- Fault - some part of system is faulty/down
+- Fault tolerance -  system working with some fault.
+- Single point of failure
 
 ### failure detection
 - problem with identifying delayed response, lost message, crashed node, temp unresponsive node.
-- Eventually perfect dailure detector - spurious timeout, temp false detections.
+- Eventually perfect failure detector - spurious timeout, temp false detections.
 
 # time clocks & ordering of events
 ## Clocks in distributed systems
@@ -105,7 +105,7 @@ Single point of failure
 - time of day clock - seconds elapsd since unix epoch (time diff can be -ve due to NTP interference)
 - monotonic - time elapsed since some arbitary time - good for measuring time elapsed on single node.
 
-## ordering o events/messages
+## ordering of events/messages
 - network delay & clock skew can make messages appear out of order.
 ### the happens before relation
 - partial order of events 
@@ -289,5 +289,132 @@ Single point of failure
 - lock free read only transactions
 - consistent snapshots
 - uses MVCC, multi version concurrency control
-- Physcical or Lamport clocks does not worl for spanner in achieving above properties.
+- Physcical or Lamport clocks does not work for spanner in achieving above properties.
 - uses TrueTime, instead if timestamp, uses time range
+
+
+
+# MIT Course
+- Storage
+- comm/ Networks
+- Computations
+
+## MapReduce
+- The computation takes a set of input key/value pairs, and produces a set of output key/value pairs. The user of the MapReduce library expresses the computation as two functions: Map and Reduce.
+- Map : takes key/value pairs and generate intermediate set of key value pairs.
+    - sort - after map so, same keys are partitioned and assigned same reduce workers.
+- Reduce : takes intermediate key-value pairs for any keys and generate possibly 0 or 1 key/value.
+
+### Examples
+- Distributed Grep:
+- Count of URL access frequency.
+- Reverse WebLink Graph.
+- Inverted Index
+- Distributed Sort
+  
+### Master
+- handles state of workers, assign Map/Reduce task to workers.
+- keep track of map/reduce locations.
+- handles re-execution of tasks on failure workers.
+- master failure is SPOF, it's data is dumped to disk periodically, and current map reduce is aborted.
+  
+### Backup Task
+- to avoid straggeler tasks.
+- backup tasks are created for few remaining map/reduce task when entire job is near completion.
+  
+### Refinements
+- partitioning functions - to partition intermediate outputs to reduce tasks based on specific criteria for better performace/load balancing,
+- Ordering gurantees
+- Combiner functions
+- Input/Output Types.
+- Side effects : writing output files atomically as an exmaple.
+- Skipping bad records.
+- Status info
+- Counters
+
+- Used wildly in rewtiring indexing for google search
+
+### conclusions:
+- restricted programming model helps with parralelizations & distributes design
+- Networking is scarce resource, avoid unnecesary network coms
+- replication/duplication for performace and fault tolerance.
+  
+## concurrency
+- I/O based
+- parallelism
+
+### challenges
+- RACE
+- co-ordination
+
+## event driven
+- good way for I/O concurrency, not for parallelism
+
+## GFS
+- performace -> sharding -> fault -> tolerance -> repliactoin -> Inconsistency -> consistency -> low performance
+
+- Split Brain : partial network failure
+
+- single master , multiple chunk servers, 
+- chunk size - 64 MB. huge compared to traditional files system
+- works well with large reads/writes, not so with large number of small files.
+- Metadata : The master stores three major types of metadata: the file and chunk namespaces, the mapping from files to chunks, and the locations of each chunk’s replicas.
+  - Operation log : stores mutation/activities related to file & chunk namespace, and mapping file -> chunks.
+    - snapshots are taken periodically, and helps recover on failure, is replicated on many machines.
+
+### consistency 
+- diff states 
+  - consistent - all replica same data
+  - defined - all replica same data, entire mutation
+  - undefined -
+  - inconsistent 
+- apply mutation in same order on all replicas, keep version number to identify missing update.
+- regular checksum between master & chunk servers to check for disk corruption.
+- Mutation - Write & record append
+- Master operations : file creation, rename, snapshots
+- Replica placements : maximize data reliability and availability, and maximize net
+work bandwidth utilization.
+  - creation, re-replication, rebalancing, garbage collection
+
+### Fault tolerance & Diagnosis
+- High Availability
+  - Fast recovery
+  - chunk replication (default is 3)
+  - master replication
+- Data integrity
+## Replication
+- Fault tolerance
+  - fail-stop failures - 
+  - does not help with bugs - X
+  - co-related failures - X
+  - 
+
+### state machine & deterministic replay
+
+
+
+
+
+# OReilly Course
+- A collection of independent computers which looks to it's users as one.
+
+## Storage
+
+## computation
+
+## synchronization
+
+## consensus
+
+## Messaging 
+
+# Front End Responsibilities
+- Request Validation
+- Authentication/Authorization
+- TLS/SSL
+- server side encryption
+- caching
+- Rate Limiting
+- Request dispatching
+- Request deduplication
+- usage data collection

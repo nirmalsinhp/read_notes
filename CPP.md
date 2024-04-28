@@ -13,7 +13,7 @@ OOP
 - derived class must implement pure virtual function else that class is also abstract
 - make public functions non virtual, make virtual functions private
 - do not call virtual functions in ctor/dtor
-- member variables are initialized before ctor boy starts, do it in initializaer list.
+- member variables are initialized before ctor body starts, do it in initializaer list.
 - default value is static time construct, do not use default value for overriden functions.
 - make non - leaf classes abstract.
 - dynamic_cast is slow, and may be pointing to underlying design issue.
@@ -58,6 +58,12 @@ Type Deduction
 Design patterns
 
 STL
+- check
+    - STL iterators & invalidation
+    - map::merge, map::extract, list::splice, list::merge, vector::front, vector::back
+    - STL associate container - find, count, equal_range
+    - parralle execusion, transform_reduce
+    - std::span
 
 iterators
 
@@ -102,3 +108,12 @@ Checks
 - syscall
 
 - NVRO can not be applied to sub object
+
+
+
+-- ask clarifying questions, solve the right problem
+-- do it with no or minimum hints
+-- complete all, check your code, check for edge cases.
+-- space and time complexity
+-- time limit is 35 minutes, pace yourself
+-- check code before submitting, run throguh edge cases.
