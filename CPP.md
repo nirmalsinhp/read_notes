@@ -108,12 +108,3 @@ Checks
 - syscall
 
 - NVRO can not be applied to sub object
-
-
-
--- ask clarifying questions, solve the right problem
--- do it with no or minimum hints
--- complete all, check your code, check for edge cases.
--- space and time complexity
--- time limit is 35 minutes, pace yourself
--- check code before submitting, run throguh edge cases.
